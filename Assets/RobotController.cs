@@ -29,13 +29,36 @@ public class RobotController : MonoBehaviour
     [SerializeField] private float motorForce;
     [SerializeField] private float brakeForce;
 
-    private void Start()
+    // Reference to the robot's rigidbody
+    private Rigidbody robotRigidbody;
+
+    // Speed of the robot
+    public float speed = 10f;
+
+    // Angular speed of the robot
+    public float angularSpeed = 10f;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        
+        // Get the rigidbody component
+        robotRigidbody = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    // Update is called once per frame
+    void Update()
     {
-        
+        // Get the input from the user
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        // Calculate the movement vector
+        Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput) * speed * Time.deltaTime;
+
+        // Rotate the robot based on the angular speed
+        transform.Rotate(Vector3.up, horizontalInput * angularSpeed * Time.deltaTime);
+
+        // Move the robot
+        robotRigidbody.MovePosition(transform.position + movement);
     }
 }
